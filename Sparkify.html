@@ -13186,7 +13186,7 @@ later in feature engeering section I compare spark sql &amp; spark declaritive</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[304]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># import libraries</span>
@@ -17069,11 +17069,23 @@ only showing top 20 rows
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Define Churn</strong></p>
+<p><strong>Define Churn</strong>
+As eexplained in video, customer is defined as churn if</p>
 <ol>
 <li>if user confirmed cancellation of service</li>
 <li>if user downgrades their service from paid to free </li>
 </ol>
+<p><strong>Note</strong>
+There are multiple ways to tackle this problem</p>
+<ol>
+<li>defined one single coumn churn, have it 1 if user is churn, and treat it like binary classification problem
+ Pro - Simpler approach, can be first step in multi step project
+ Cons - May not get good accuracy as technically we are trying to predict two values.</li>
+<li>define one single counmn churn and with multiple values , 2 if cancelled, 1 if downgrade &amp; 0 if neither, and consider this as multiclass classification problem.
+ Pros- Business wise it make much sence as customer who are on verge of downgrading should be treated differently as customer cancelling
+ Cons- bit complicated, also if customer downgrades &amp; then cancel how to handle such cases. </li>
+</ol>
+<p>I have selected option 1, eventhough it may give lower accuracy it is as per requiremetn in video</p>
 
 </div>
 </div>
@@ -18233,7 +18245,7 @@ below are important features</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[222]:</div>
+<div class="prompt input_prompt">In&nbsp;[77]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">total_users</span><span class="o">=</span><span class="n">clean_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
@@ -18246,7 +18258,7 @@ below are important features</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[224]:</div>
+<div class="prompt input_prompt">In&nbsp;[78]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">total_users</span><span class="p">)</span>
@@ -18262,7 +18274,7 @@ below are important features</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[251]:</div>
+<div class="prompt input_prompt">In&nbsp;[79]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_new_row</span><span class="p">(</span><span class="n">all_users</span><span class="p">,</span><span class="n">feat_df</span><span class="p">):</span>
@@ -18289,7 +18301,7 @@ below are important features</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
+<div class="prompt input_prompt">In&nbsp;[80]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#1A Number of thumbs up</span>
@@ -18302,7 +18314,7 @@ below are important features</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[252]:</div>
+<div class="prompt input_prompt">In&nbsp;[81]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_1</span> <span class="o">=</span> <span class="n">clean_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;page&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">page</span> <span class="o">==</span> <span class="s1">&#39;Thumbs Up&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">withColumnRenamed</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;tot_thumbs_up&#39;</span><span class="p">)</span>
@@ -18356,7 +18368,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[252]:</div>
+    <div class="prompt output_prompt">Out[81]:</div>
 
 
 
@@ -18381,7 +18393,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[253]:</div>
+<div class="prompt input_prompt">In&nbsp;[82]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_1</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_1</span><span class="p">)</span>
@@ -18394,7 +18406,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[254]:</div>
+<div class="prompt input_prompt">In&nbsp;[83]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_1</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
@@ -18410,7 +18422,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[254]:</div>
+    <div class="prompt output_prompt">Out[83]:</div>
 
 
 
@@ -18427,7 +18439,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
+<div class="prompt input_prompt">In&nbsp;[84]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#1B Number songs played</span>
@@ -18485,7 +18497,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[255]:</div>
+<div class="prompt input_prompt">In&nbsp;[85]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_2</span><span class="o">=</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select userID,count(song) tot_songs from sparkify where song is not null group by userId&quot;</span><span class="p">)</span>
@@ -18539,7 +18551,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[255]:</div>
+    <div class="prompt output_prompt">Out[85]:</div>
 
 
 
@@ -18556,7 +18568,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[258]:</div>
+<div class="prompt input_prompt">In&nbsp;[86]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#1C Number of artist played</span>
@@ -18611,7 +18623,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[258]:</div>
+    <div class="prompt output_prompt">Out[86]:</div>
 
 
 
@@ -18628,7 +18640,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[259]:</div>
+<div class="prompt input_prompt">In&nbsp;[87]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_3</span><span class="o">=</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select userID,count(artist) tot_artist from sparkify where artist is not null group by userId&quot;</span><span class="p">)</span>
@@ -18682,7 +18694,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[259]:</div>
+    <div class="prompt output_prompt">Out[87]:</div>
 
 
 
@@ -18699,7 +18711,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[260]:</div>
+<div class="prompt input_prompt">In&nbsp;[88]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#1d Number of friends recommended</span>
@@ -18754,7 +18766,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[260]:</div>
+    <div class="prompt output_prompt">Out[88]:</div>
 
 
 
@@ -18771,7 +18783,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[261]:</div>
+<div class="prompt input_prompt">In&nbsp;[89]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_4</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_4</span><span class="p">)</span>
@@ -18788,7 +18800,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[261]:</div>
+    <div class="prompt output_prompt">Out[89]:</div>
 
 
 
@@ -18805,7 +18817,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[262]:</div>
+<div class="prompt input_prompt">In&nbsp;[90]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#1E Number of songs added to playlist </span>
@@ -18860,7 +18872,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[262]:</div>
+    <div class="prompt output_prompt">Out[90]:</div>
 
 
 
@@ -18877,7 +18889,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[263]:</div>
+<div class="prompt input_prompt">In&nbsp;[91]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_5</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_5</span><span class="p">)</span>
@@ -18894,7 +18906,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[263]:</div>
+    <div class="prompt output_prompt">Out[91]:</div>
 
 
 
@@ -18911,7 +18923,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[264]:</div>
+<div class="prompt input_prompt">In&nbsp;[92]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#2A Number of thumbs down</span>
@@ -18966,7 +18978,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[264]:</div>
+    <div class="prompt output_prompt">Out[92]:</div>
 
 
 
@@ -18983,7 +18995,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[265]:</div>
+<div class="prompt input_prompt">In&nbsp;[93]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_2A</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_2A</span><span class="p">)</span>
@@ -19000,7 +19012,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[265]:</div>
+    <div class="prompt output_prompt">Out[93]:</div>
 
 
 
@@ -19017,7 +19029,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[266]:</div>
+<div class="prompt input_prompt">In&nbsp;[94]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#2B Number of error received Error</span>
@@ -19072,7 +19084,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[266]:</div>
+    <div class="prompt output_prompt">Out[94]:</div>
 
 
 
@@ -19089,7 +19101,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[267]:</div>
+<div class="prompt input_prompt">In&nbsp;[95]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_2B</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_2B</span><span class="p">)</span>
@@ -19106,7 +19118,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[267]:</div>
+    <div class="prompt output_prompt">Out[95]:</div>
 
 
 
@@ -19123,7 +19135,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[268]:</div>
+<div class="prompt input_prompt">In&nbsp;[96]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#2C Number of help call received</span>
@@ -19178,7 +19190,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[268]:</div>
+    <div class="prompt output_prompt">Out[96]:</div>
 
 
 
@@ -19195,7 +19207,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[269]:</div>
+<div class="prompt input_prompt">In&nbsp;[97]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_2C</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_2C</span><span class="p">)</span>
@@ -19212,7 +19224,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[269]:</div>
+    <div class="prompt output_prompt">Out[97]:</div>
 
 
 
@@ -19229,7 +19241,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[270]:</div>
+<div class="prompt input_prompt">In&nbsp;[98]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#2D Number of settings changed</span>
@@ -19284,7 +19296,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[270]:</div>
+    <div class="prompt output_prompt">Out[98]:</div>
 
 
 
@@ -19301,7 +19313,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[271]:</div>
+<div class="prompt input_prompt">In&nbsp;[99]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_2D</span><span class="o">=</span><span class="n">add_new_row</span><span class="p">(</span><span class="n">uId_list</span><span class="p">,</span><span class="n">feat_2D</span><span class="p">)</span>
@@ -19318,7 +19330,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[271]:</div>
+    <div class="prompt output_prompt">Out[99]:</div>
 
 
 
@@ -19335,7 +19347,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="prompt input_prompt">In&nbsp;[100]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#3A Gender of user</span>
@@ -19393,7 +19405,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[101]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_3A</span><span class="o">=</span><span class="n">feat_3A</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="s1">&#39;gender&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s1">&#39;gender&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">))</span>
@@ -19450,7 +19462,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[276]:</div>
+<div class="prompt input_prompt">In&nbsp;[102]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Total length of listening utilizing all services</span>
@@ -19505,7 +19517,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[276]:</div>
+    <div class="prompt output_prompt">Out[102]:</div>
 
 
 
@@ -19522,7 +19534,209 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[277]:</div>
+<div class="prompt input_prompt">In&nbsp;[103]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_3C</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;registration&#39;</span><span class="p">,</span> <span class="s1">&#39;ts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;tot_lifetime&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">ts</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">registration</span><span class="p">))</span>\
+    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;tot_lifetime&#39;</span> <span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">})</span>\
+    <span class="o">.</span><span class="n">withColumnRenamed</span><span class="p">(</span><span class="s1">&#39;max(tot_lifetime)&#39;</span><span class="p">,</span> <span class="s1">&#39;tot_lifetime&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;tot_lifetime&#39;</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span><span class="mi">3600</span><span class="o">/</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;tot_lifetime&#39;</span><span class="p">))</span>
+<span class="n">feat_3C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+------+------------------+
+|userId|      tot_lifetime|
++------+------------------+
+|100010|  55.6436574074074|
+|200002| 70.07462962962963|
+|   125| 71.31688657407408|
+|    51|19.455844907407407|
+|   124|131.55591435185184|
+|     7| 72.77818287037037|
+|    54|110.75168981481481|
+|    15|56.513576388888886|
+|   155|23.556018518518517|
+|   132|  66.8891087962963|
+|   154|23.872037037037035|
+|100014| 85.08340277777778|
+|   101|53.965937499999995|
+|    11|124.47825231481481|
+|   138| 66.62668981481481|
+|300017| 74.35851851851852|
+|    29|60.104050925925925|
+|    69| 71.42444444444445|
+|100021| 64.73886574074074|
+|    42| 67.11364583333334|
++------+------------------+
+only showing top 20 rows
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[104]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_4A</span><span class="o">=</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select distinct(userId),user_cancle from sparkify&quot;</span><span class="p">)</span>
+<span class="n">feat_4A</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">feat_4A</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+------+-----------+
+|userId|user_cancle|
++------+-----------+
+|100010|          0|
+|200002|          0|
+|   125|          1|
+|   124|          0|
+|    51|          1|
+|     7|          0|
+|    15|          0|
+|    54|          1|
+|   155|          0|
+|100014|          1|
+|   132|          0|
+|   154|          0|
+|   101|          1|
+|    11|          0|
+|   138|          0|
+|300017|          0|
+|100021|          1|
+|    29|          1|
+|    69|          0|
+|   112|          0|
++------+-----------+
+only showing top 20 rows
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[104]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>225</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[105]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_4B</span><span class="o">=</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select distinct(userId),user_downgrade from sparkify&quot;</span><span class="p">)</span>
+<span class="n">feat_4B</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">feat_4B</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+------+--------------+
+|userId|user_downgrade|
++------+--------------+
+|100010|             0|
+|200002|             0|
+|   125|             0|
+|   124|             0|
+|    51|             0|
+|     7|             0|
+|    15|             0|
+|    54|             1|
+|   155|             0|
+|100014|             0|
+|   132|             0|
+|   154|             0|
+|   101|             0|
+|    11|             1|
+|   138|             0|
+|300017|             0|
+|100021|             0|
+|    29|             0|
+|    69|             0|
+|   112|             0|
++------+--------------+
+only showing top 20 rows
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[105]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>225</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[106]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">clean_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s1">&#39;user_churn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">dropDuplicates</span><span class="p">()</span>
@@ -19576,7 +19790,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[277]:</div>
+    <div class="prompt output_prompt">Out[106]:</div>
 
 
 
@@ -19593,13 +19807,12 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[278]:</div>
+<div class="prompt input_prompt">In&nbsp;[111]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span> <span class="o">=</span> <span class="n">feat_1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_4</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
              <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_5</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
-             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2D</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
-             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2D</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_4A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_4B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
 
 <span class="n">final_data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -19618,30 +19831,30 @@ only showing top 20 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------+
-|tot_thumbs_up|tot_songs|tot_artist|tot_friends|tot_playlist|tot_thumb_down|tot_errs|tot_help|tot_setting|gender|   tot_listen_time|target|
-+-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------+
-|           17|      275|       275|          4|           7|             5|       0|       2|          0|     0| 66940.89735000003|     0|
-|           21|      387|       387|          4|           8|             6|       0|       2|          0|     1| 94008.87593999993|     0|
-|            0|        8|         8|          0|           0|             0|       0|       0|          0|     1|2089.1131000000005|     1|
-|          171|     4079|      4079|         74|         118|            41|       6|      23|          6|     0|1012312.0927899999|     0|
-|          100|     2111|      2111|         28|          52|            21|       1|      12|          1|     1| 523275.8428000004|     1|
-|            7|      150|       150|          1|           5|             1|       1|       1|          1|     1| 38034.08710000002|     0|
-|           81|     1914|      1914|         31|          59|            14|       2|       8|          2|     1|477307.60581000015|     0|
-|          163|     2841|      2841|         33|          72|            29|       1|      17|          3|     0| 711344.9195400011|     1|
-|           58|      820|       820|         11|          24|             3|       3|       9|          0|     0|       198779.2919|     0|
-|           17|      257|       257|          6|           7|             3|       0|       2|          0|     1| 67703.47208000004|     1|
-|           96|     1928|      1928|         41|          38|            17|       3|      16|          4|     0| 483118.9038399997|     0|
-|           11|       84|        84|          3|           1|             0|       0|       1|          0|     0|20660.023910000007|     0|
-|           86|     1797|      1797|         29|          61|            16|       3|      12|          2|     1| 447464.0146699989|     1|
-|           40|      647|       647|          6|          20|             9|       1|       3|          2|     0|159669.96303999983|     1|
-|           95|     2070|      2070|         41|          67|            24|       1|      13|          4|     1| 512449.8827599989|     0|
-|          303|     3632|      3632|         63|         113|            28|       5|      27|          3|     0| 897406.9802100015|     0|
-|           11|      230|       230|          7|           7|             5|       2|       0|          0|     1| 57633.17563999999|     1|
-|          154|     3028|      3028|         47|          89|            22|       0|      28|          4|     1| 754517.5625700009|     1|
-|           72|     1125|      1125|         12|          33|             9|       4|       7|          1|     0| 286064.0256399999|     0|
-|            9|      215|       215|          7|           7|             3|       0|       1|          3|     1| 53062.74659000002|     0|
-+-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------+
+<pre>+-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+-----------+--------------+------+
+|tot_thumbs_up|tot_songs|tot_artist|tot_friends|tot_playlist|tot_thumb_down|tot_errs|tot_help|tot_setting|gender|   tot_listen_time|      tot_lifetime|user_cancle|user_downgrade|target|
++-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+-----------+--------------+------+
+|           17|      275|       275|          4|           7|             5|       0|       2|          0|     0| 66940.89735000003|  55.6436574074074|          0|             0|     0|
+|           21|      387|       387|          4|           8|             6|       0|       2|          0|     1| 94008.87593999993| 70.07462962962963|          0|             0|     0|
+|            0|        8|         8|          0|           0|             0|       0|       0|          0|     1|2089.1131000000005| 71.31688657407408|          1|             0|     1|
+|          171|     4079|      4079|         74|         118|            41|       6|      23|          6|     0|1012312.0927899999|131.55591435185184|          0|             0|     0|
+|          100|     2111|      2111|         28|          52|            21|       1|      12|          1|     1| 523275.8428000004|19.455844907407407|          1|             0|     1|
+|            7|      150|       150|          1|           5|             1|       1|       1|          1|     1| 38034.08710000002| 72.77818287037037|          0|             0|     0|
+|           81|     1914|      1914|         31|          59|            14|       2|       8|          2|     1|477307.60581000015|56.513576388888886|          0|             0|     0|
+|          163|     2841|      2841|         33|          72|            29|       1|      17|          3|     0| 711344.9195400011|110.75168981481481|          1|             1|     1|
+|           58|      820|       820|         11|          24|             3|       3|       9|          0|     0|       198779.2919|23.556018518518517|          0|             0|     0|
+|           17|      257|       257|          6|           7|             3|       0|       2|          0|     1| 67703.47208000004| 85.08340277777778|          1|             0|     1|
+|           96|     1928|      1928|         41|          38|            17|       3|      16|          4|     0| 483118.9038399997|  66.8891087962963|          0|             0|     0|
+|           11|       84|        84|          3|           1|             0|       0|       1|          0|     0|20660.023910000007|23.872037037037035|          0|             0|     0|
+|           86|     1797|      1797|         29|          61|            16|       3|      12|          2|     1| 447464.0146699989|53.965937499999995|          1|             0|     1|
+|           40|      647|       647|          6|          20|             9|       1|       3|          2|     0|159669.96303999983|124.47825231481481|          0|             1|     1|
+|           95|     2070|      2070|         41|          67|            24|       1|      13|          4|     1| 512449.8827599989| 66.62668981481481|          0|             0|     0|
+|          303|     3632|      3632|         63|         113|            28|       5|      27|          3|     0| 897406.9802100015| 74.35851851851852|          0|             0|     0|
+|           11|      230|       230|          7|           7|             5|       2|       0|          0|     1| 57633.17563999999| 64.73886574074074|          1|             0|     1|
+|          154|     3028|      3028|         47|          89|            22|       0|      28|          4|     1| 754517.5625700009|60.104050925925925|          1|             0|     1|
+|           72|     1125|      1125|         12|          33|             9|       4|       7|          1|     0| 286064.0256399999| 71.42444444444445|          0|             0|     0|
+|            9|      215|       215|          7|           7|             3|       0|       1|          3|     1| 53062.74659000002| 87.46262731481481|          0|             0|     0|
++-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+-----------+--------------+------+
 only showing top 20 rows
 
 </pre>
@@ -19654,22 +19867,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[109]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span> <span class="o">=</span> <span class="n">feat_1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_4</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span>\
-             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_5</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span>\
-             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2D</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[279]:</div>
+<div class="prompt input_prompt">In&nbsp;[112]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
@@ -19685,7 +19883,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[279]:</div>
+    <div class="prompt output_prompt">Out[112]:</div>
 
 
 
@@ -19702,7 +19900,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[107]:</div>
+<div class="prompt input_prompt">In&nbsp;[113]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">clean_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;userID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
@@ -19718,7 +19916,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[107]:</div>
+    <div class="prompt output_prompt">Out[113]:</div>
 
 
 
@@ -19735,80 +19933,33 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[280]:</div>
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#final_data.describe()</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[280]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>DataFrame[summary: string, tot_thumbs_up: string, tot_songs: string, tot_artist: string, tot_friends: string, tot_playlist: string, tot_thumb_down: string, tot_errs: string, tot_help: string, tot_setting: string, gender: string, tot_listen_time: string, target: string]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[281]:</div>
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Summary&quot;</span><span class="p">,</span><span class="s2">&quot;tot_thumbs_up&quot;</span><span class="p">,</span><span class="s2">&quot;tot_songs&quot;</span><span class="p">,</span><span class="s2">&quot;tot_artist&quot;</span><span class="p">,</span><span class="s2">&quot;tot_thumb_down&quot;</span><span class="p">,</span><span class="s2">&quot;tot_errs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#final_data.describe().select(&quot;Summary&quot;,&quot;tot_thumbs_up&quot;,&quot;tot_songs&quot;,&quot;tot_artist&quot;,&quot;tot_thumb_down&quot;,&quot;tot_errs&quot;).show()</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>+-------+------------------+------------------+------------------+------------------+------------------+
-|Summary|     tot_thumbs_up|         tot_songs|        tot_artist|    tot_thumb_down|          tot_errs|
-+-------+------------------+------------------+------------------+------------------+------------------+
-|  count|               225|               225|               225|               225|               225|
-|   mean|55.782222222222224|1013.8133333333334|1013.8133333333334|11.315555555555555|              1.12|
-| stddev| 65.47792460907043|1104.9607785540886|1104.9607785540886|13.077481251105503|1.4726070176973318|
-|    min|                 0|                 3|                 3|                 0|                 0|
-|    max|               437|              8002|              8002|                75|                 7|
-+-------+------------------+------------------+------------------+------------------+------------------+
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[282]:</div>
+<div class="prompt input_prompt">In&nbsp;[119]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd_final</span><span class="o">=</span><span class="n">final_data</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
@@ -19821,194 +19972,20 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[283]:</div>
+<div class="prompt input_prompt">In&nbsp;[120]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd_final</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#pd_final.describe()</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[283]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>tot_thumbs_up</th>
-      <th>tot_songs</th>
-      <th>tot_artist</th>
-      <th>tot_friends</th>
-      <th>tot_playlist</th>
-      <th>tot_thumb_down</th>
-      <th>tot_errs</th>
-      <th>tot_help</th>
-      <th>tot_setting</th>
-      <th>gender</th>
-      <th>tot_listen_time</th>
-      <th>target</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>225.000000</td>
-      <td>2.250000e+02</td>
-      <td>225.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>55.782222</td>
-      <td>1013.813333</td>
-      <td>1013.813333</td>
-      <td>19.008889</td>
-      <td>29.004444</td>
-      <td>11.315556</td>
-      <td>1.120000</td>
-      <td>6.462222</td>
-      <td>1.377778</td>
-      <td>0.537778</td>
-      <td>2.525583e+05</td>
-      <td>0.408889</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>65.477925</td>
-      <td>1104.960779</td>
-      <td>1104.960779</td>
-      <td>20.581717</td>
-      <td>32.716654</td>
-      <td>13.077481</td>
-      <td>1.472607</td>
-      <td>7.242585</td>
-      <td>1.735770</td>
-      <td>0.499682</td>
-      <td>2.753964e+05</td>
-      <td>0.492725</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>0.000000</td>
-      <td>3.000000</td>
-      <td>3.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>6.916688e+02</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>11.000000</td>
-      <td>230.000000</td>
-      <td>230.000000</td>
-      <td>5.000000</td>
-      <td>6.000000</td>
-      <td>2.000000</td>
-      <td>0.000000</td>
-      <td>1.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>5.763318e+04</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>35.000000</td>
-      <td>675.000000</td>
-      <td>675.000000</td>
-      <td>14.000000</td>
-      <td>17.000000</td>
-      <td>7.000000</td>
-      <td>1.000000</td>
-      <td>5.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.680938e+05</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>81.000000</td>
-      <td>1571.000000</td>
-      <td>1571.000000</td>
-      <td>27.000000</td>
-      <td>44.000000</td>
-      <td>16.000000</td>
-      <td>2.000000</td>
-      <td>9.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>3.924015e+05</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>437.000000</td>
-      <td>8002.000000</td>
-      <td>8002.000000</td>
-      <td>143.000000</td>
-      <td>240.000000</td>
-      <td>75.000000</td>
-      <td>7.000000</td>
-      <td>46.000000</td>
-      <td>10.000000</td>
-      <td>1.000000</td>
-      <td>1.991155e+06</td>
-      <td>1.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[284]:</div>
+<div class="prompt input_prompt">In&nbsp;[121]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">non_churn</span> <span class="o">=</span><span class="n">pd_final</span><span class="p">[</span><span class="n">pd_final</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -20021,7 +19998,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[285]:</div>
+<div class="prompt input_prompt">In&nbsp;[122]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">churn</span><span class="o">=</span><span class="n">pd_final</span><span class="p">[</span><span class="n">pd_final</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -20034,7 +20011,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[286]:</div>
+<div class="prompt input_prompt">In&nbsp;[123]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">([</span><span class="n">non_churn</span><span class="p">,</span><span class="n">churn</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;non_churn&#39;</span><span class="p">,</span><span class="s1">&#39;churn&#39;</span><span class="p">],)</span>
@@ -20050,14 +20027,14 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[286]:</div>
+    <div class="prompt output_prompt">Out[123]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>([&lt;matplotlib.patches.Wedge at 0x7f57a480ab38&gt;,
-  &lt;matplotlib.patches.Wedge at 0x7f57a481f048&gt;],
+<pre>([&lt;matplotlib.patches.Wedge at 0x7f3eafa86d30&gt;,
+  &lt;matplotlib.patches.Wedge at 0x7f3eaf9e6240&gt;],
  [Text(-0.310576,1.05525,&#39;non_churn&#39;), Text(0.310576,-1.05525,&#39;churn&#39;)])</pre>
 </div>
 
@@ -20092,7 +20069,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[287]:</div>
+<div class="prompt input_prompt">In&nbsp;[124]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#combine all the features in one single feature vector.</span>
@@ -20106,7 +20083,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[288]:</div>
+<div class="prompt input_prompt">In&nbsp;[125]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span>
@@ -20122,7 +20099,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[288]:</div>
+    <div class="prompt output_prompt">Out[125]:</div>
 
 
 
@@ -20139,6 +20116,9 @@ only showing top 20 rows
  &#39;tot_setting&#39;,
  &#39;gender&#39;,
  &#39;tot_listen_time&#39;,
+ &#39;tot_lifetime&#39;,
+ &#39;user_cancle&#39;,
+ &#39;user_downgrade&#39;,
  &#39;target&#39;]</pre>
 </div>
 
@@ -20150,7 +20130,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[289]:</div>
+<div class="prompt input_prompt">In&nbsp;[126]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
@@ -20163,7 +20143,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[290]:</div>
+<div class="prompt input_prompt">In&nbsp;[127]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span><span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
@@ -20191,7 +20171,7 @@ only showing top 20 rows
 +--------------------+
 |[17.0,275.0,275.0...|
 |[21.0,387.0,387.0...|
-|(11,[1,2,9,10],[8...|
+|(14,[1,2,9,10,11,...|
 |[171.0,4079.0,407...|
 |[100.0,2111.0,211...|
 |[7.0,150.0,150.0,...|
@@ -20200,7 +20180,7 @@ only showing top 20 rows
 |[58.0,820.0,820.0...|
 |[17.0,257.0,257.0...|
 |[96.0,1928.0,1928...|
-|[11.0,84.0,84.0,3...|
+|(14,[0,1,2,3,4,7,...|
 |[86.0,1797.0,1797...|
 |[40.0,647.0,647.0...|
 |[95.0,2070.0,2070...|
@@ -20222,7 +20202,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[291]:</div>
+<div class="prompt input_prompt">In&nbsp;[128]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#2 Standardsize data </span>
@@ -20250,7 +20230,7 @@ only showing top 20 rows
 +--------------------+--------------------+
 |[17.0,275.0,275.0...|[0.25962948736535...|
 |[21.0,387.0,387.0...|[0.32071877851013...|
-|(11,[1,2,9,10],[8...|(11,[1,2,9,10],[0...|
+|(14,[1,2,9,10,11,...|(14,[1,2,9,10,11,...|
 |[171.0,4079.0,407...|[2.61156719643969...|
 |[100.0,2111.0,211...|[1.52723227861970...|
 |[7.0,150.0,150.0,...|[0.10690625950337...|
@@ -20259,7 +20239,7 @@ only showing top 20 rows
 |[58.0,820.0,820.0...|[0.88579472159942...|
 |[17.0,257.0,257.0...|[0.25962948736535...|
 |[96.0,1928.0,1928...|[1.46614298747491...|
-|[11.0,84.0,84.0,3...|[0.16799555064816...|
+|(14,[0,1,2,3,4,7,...|(14,[0,1,2,3,4,7,...|
 |[86.0,1797.0,1797...|[1.31341975961294...|
 |[40.0,647.0,647.0...|[0.61089291144788...|
 |[95.0,2070.0,2070...|[1.45087066468872...|
@@ -20281,7 +20261,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[292]:</div>
+<div class="prompt input_prompt">In&nbsp;[129]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#create new dataframe with one target &amp; scaled featyrs to be used for training</span>
@@ -20295,7 +20275,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[293]:</div>
+<div class="prompt input_prompt">In&nbsp;[130]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -20320,7 +20300,7 @@ only showing top 20 rows
 +-----+--------------------+
 |    0|[0.25962948736535...|
 |    0|[0.32071877851013...|
-|    1|(11,[1,2,9,10],[0...|
+|    1|(14,[1,2,9,10,11,...|
 |    0|[2.61156719643969...|
 |    1|[1.52723227861970...|
 |    0|[0.10690625950337...|
@@ -20329,7 +20309,7 @@ only showing top 20 rows
 |    0|[0.88579472159942...|
 |    1|[0.25962948736535...|
 |    0|[1.46614298747491...|
-|    0|[0.16799555064816...|
+|    0|(14,[0,1,2,3,4,7,...|
 |    1|[1.31341975961294...|
 |    1|[0.61089291144788...|
 |    0|[1.45087066468872...|
@@ -20351,10 +20331,10 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[294]:</div>
+<div class="prompt input_prompt">In&nbsp;[131]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
 </pre></div>
 
@@ -20365,7 +20345,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[295]:</div>
+<div class="prompt input_prompt">In&nbsp;[132]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.classification</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
@@ -20382,7 +20362,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[296]:</div>
+<div class="prompt input_prompt">In&nbsp;[133]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_test</span><span class="o">.</span><span class="n">columns</span>
@@ -20398,7 +20378,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[296]:</div>
+    <div class="prompt output_prompt">Out[133]:</div>
 
 
 
@@ -20415,7 +20395,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[297]:</div>
+<div class="prompt input_prompt">In&nbsp;[134]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_test</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -20438,26 +20418,26 @@ only showing top 20 rows
 <pre>+-----+--------------------+--------------------+--------------------+----------+
 |label|     Scaled_features|       rawPrediction|         probability|prediction|
 +-----+--------------------+--------------------+--------------------+----------+
-|    1|[0.25962948736535...|[0.50195394417676...|[0.62291840534410...|       0.0|
-|    0|[4.62751380421771...|[-0.1369381257412...|[0.46581886574083...|       1.0|
-|    0|[2.53520558250871...|[0.78415482238179...|[0.68657488171560...|       0.0|
-|    0|(11,[0,1,2,4,9,10...|[0.65523854015117...|[0.65818998286509...|       0.0|
-|    0|[0.58034826587548...|[0.24795884596925...|[0.56167403971690...|       0.0|
-|    0|(11,[0,1,2,3,10],...|[0.86970203214016...|[0.70468369330214...|       0.0|
-|    1|[0.68725452537886...|[-0.0525188512718...|[0.48687330424690...|       1.0|
-|    0|[0.35126342408253...|[0.60428292055125...|[0.64663555856286...|       0.0|
-|    1|[2.13812519006758...|[0.15214190901620...|[0.53796227890811...|       0.0|
-|    1|[1.37450905075773...|[0.52869616363097...|[0.62917896152935...|       0.0|
-|    0|[0.73307149373745...|[0.85504120831959...|[0.70162358056355...|       0.0|
-|    1|[4.23043341177658...|[-1.5579334285254...|[0.17394338659536...|       1.0|
-|    0|[0.16799555064816...|[0.63445869328661...|[0.65349976877357...|       0.0|
-|    1|[0.70252684816506...|[0.52241629755481...|[0.62771260368782...|       0.0|
-|    0|(11,[0,1,2,3,10],...|[0.91703644638515...|[0.71443787659863...|       0.0|
-|    0|[1.16069653175097...|[0.42640032793812...|[0.60501377319498...|       0.0|
-|    0|[0.51925897473070...|[0.92880429492866...|[0.71683263990467...|       0.0|
-|    1|[1.38978137354393...|[0.00702653111092...|[0.50175662555037...|       0.0|
-|    0|[0.30544645572394...|[0.66064970853631...|[0.65940632135652...|       0.0|
-|    1|[0.19854019622056...|[0.17046023507333...|[0.54251216999987...|       0.0|
+|    0|[0.32071877851013...|[7.05467826137469...|[0.99913738427949...|       0.0|
+|    0|[2.61156719643969...|[7.54784052601174...|[0.99947303036756...|       0.0|
+|    1|[0.21381251900675...|[-6.0299130988969...|[0.00239992951009...|       1.0|
+|    0|(14,[0,1,2,4,9,10...|[7.18027235052549...|[0.99923911895105...|       0.0|
+|    0|(14,[0,1,2,3,10,1...|[5.71177380187436...|[0.99670409716867...|       0.0|
+|    1|[0.68725452537886...|[-8.5577048055597...|[1.92022722473836...|       1.0|
+|    1|[0.03054464557239...|[-9.5451320974437...|[7.15435900059261...|       1.0|
+|    1|[0.10690625950337...|[-5.8076305307506...|[0.00299554058777...|       1.0|
+|    0|[1.23705814568196...|[7.57567881254144...|[0.99948749057319...|       0.0|
+|    0|[1.67995550648167...|[6.24961015927930...|[0.99807251551866...|       0.0|
+|    0|[2.51993325972251...|[12.9903857443664...|[0.99999771783961...|       0.0|
+|    0|[0.65670987980647...|[8.77165925796575...|[0.99984495796930...|       0.0|
+|    1|[0.56507594308929...|[-5.5891266381859...|[0.00372436854567...|       1.0|
+|    1|(14,[0,1,2,9,10,1...|[-7.7822510148990...|[4.16898404463265...|       1.0|
+|    1|[0.44289736079971...|[-6.8088660624790...|[0.00110272664555...|       1.0|
+|    1|[0.19854019622056...|[-7.0848996866461...|[8.36957726421980...|       1.0|
+|    0|[1.64941086090928...|[6.30244093417308...|[0.99817152151398...|       0.0|
+|    1|[0.65670987980647...|[-8.5271212590924...|[1.97985004754899...|       1.0|
+|    0|[1.42032601911632...|[5.92279175891486...|[0.99732943680518...|       0.0|
+|    1|[0.42762503801351...|[-4.4175606058655...|[0.01191982802751...|       1.0|
 +-----+--------------------+--------------------+--------------------+----------+
 only showing top 20 rows
 
@@ -20471,7 +20451,40 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[298]:</div>
+<div class="prompt input_prompt">In&nbsp;[136]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_test</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">predict_test</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">predict_test</span><span class="o">.</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[136]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>25</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[137]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rf_clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;Scaled_features&quot;</span><span class="p">)</span>
@@ -20486,7 +20499,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[299]:</div>
+<div class="prompt input_prompt">In&nbsp;[138]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cross_val_rf</span> <span class="o">=</span> <span class="n">CrossValidator</span><span class="p">(</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">rf_clf</span><span class="p">,</span> <span class="n">estimatorParamMaps</span> <span class="o">=</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">evaluator</span> <span class="o">=</span> <span class="n">f1_evaluation</span><span class="p">,</span> <span class="n">numFolds</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
@@ -20499,7 +20512,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[300]:</div>
+<div class="prompt input_prompt">In&nbsp;[139]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cv_model_rf</span> <span class="o">=</span> <span class="n">cross_val_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
@@ -20512,7 +20525,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[301]:</div>
+<div class="prompt input_prompt">In&nbsp;[140]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">res_rf</span> <span class="o">=</span> <span class="n">cv_model_rf</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
@@ -20525,7 +20538,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[302]:</div>
+<div class="prompt input_prompt">In&nbsp;[141]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Getting different evaluation metrics for Random Forest</span>
@@ -20550,8 +20563,8 @@ only showing top 20 rows
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The metrics for our Random Forest Classifier are as follows :
-The accuracy Score is 0.6111111111111112
-The F2 is 0.611111111111111
+The accuracy Score is 0.92
+The F2 is 0.9207792207792207
 </pre>
 </div>
 </div>
@@ -20562,7 +20575,7 @@ The F2 is 0.611111111111111
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[305]:</div>
+<div class="prompt input_prompt">In&nbsp;[142]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gbt_clf</span> <span class="o">=</span> <span class="n">GBTClassifier</span><span class="p">(</span><span class="n">maxIter</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">maxDepth</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span><span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;Scaled_features&quot;</span><span class="p">)</span>
@@ -20581,7 +20594,7 @@ The F2 is 0.611111111111111
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[306]:</div>
+<div class="prompt input_prompt">In&nbsp;[143]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cv_model_gbt</span> <span class="o">=</span> <span class="n">cross_val_gbt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
@@ -20598,13 +20611,13 @@ The F2 is 0.611111111111111
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[306]:</div>
+    <div class="prompt output_prompt">Out[143]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[0.5716328791543166]</pre>
+<pre>[1.0]</pre>
 </div>
 
 </div>
@@ -20615,7 +20628,7 @@ The F2 is 0.611111111111111
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[307]:</div>
+<div class="prompt input_prompt">In&nbsp;[144]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">res_gbt</span> <span class="o">=</span> <span class="n">cv_model_gbt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
@@ -20640,8 +20653,8 @@ The F2 is 0.611111111111111
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The metrics for our Gradient Boosted Trees Classifier are as follows: 
-The F-1 Score is 0.5833333333333334
-The accuracy is 0.5802469135802468
+The F-1 Score is 1.0
+The accuracy is 1.0
 </pre>
 </div>
 </div>
@@ -20652,7 +20665,7 @@ The accuracy is 0.5802469135802468
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[310]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Tuning Hyperparameters for the Gradient Boosting Trees model using Grid Search</span>
@@ -20673,11 +20686,85 @@ The accuracy is 0.5802469135802468
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[311]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cv_model_gbt</span> <span class="o">=</span> <span class="n">cross_val_gbt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
 <span class="n">cv_model_gbt</span><span class="o">.</span><span class="n">avgMetrics</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>STEP 2 -</strong></p>
+<p>Removing customer cancel &amp; custmer downgrage colunms, as although technically these are features derived from database, which we can use in data analysis. 
+but in terms of business we want to detect churn before they reach to that step.</p>
+<p>Also creating reusable function for classification problem</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[152]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">churn_Detection</span><span class="p">(</span><span class="n">final_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function will run churn detection on data set for sparkify application</span>
+<span class="sd">    Param :- final_data, data frame to be used for churn detection</span>
+<span class="sd">    output:- none, F1 score &amp; accuracy of random forest alorithm on given dataframe will be printed on screen</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#combine all the features in one single feature vector.</span>
+    <span class="n">cols</span><span class="o">=</span><span class="n">final_data</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+    <span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span><span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+    <span class="c1"># Now let us use the transform method to transform our dataset</span>
+    <span class="n">final_data</span><span class="o">=</span><span class="n">assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">final_data</span><span class="p">)</span>
+    <span class="c1">#final_data.select(&quot;features&quot;).show()</span>
+    <span class="c1">#2 Standardsize data </span>
+    <span class="n">standardscaler</span><span class="o">=</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">setInputCol</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setOutputCol</span><span class="p">(</span><span class="s2">&quot;Scaled_features&quot;</span><span class="p">)</span>
+    <span class="n">final_data</span><span class="o">=</span><span class="n">standardscaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">final_data</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">final_data</span><span class="p">)</span>
+    <span class="c1">#final_data.select(&quot;features&quot;,&quot;Scaled_features&quot;).show()</span>
+    <span class="c1">#Train test split</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">final_data</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">final_data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">),</span> <span class="n">final_data</span><span class="o">.</span><span class="n">Scaled_features</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;Scaled_features&quot;</span><span class="p">))</span>
+    <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+    <span class="c1">#running algorithm</span>
+    <span class="n">rf_clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;Scaled_features&quot;</span><span class="p">)</span>
+    <span class="n">f1_evaluation</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span><span class="n">metricName</span> <span class="o">=</span> <span class="s1">&#39;f1&#39;</span><span class="p">)</span>
+    <span class="n">param_grid</span> <span class="o">=</span> <span class="n">ParamGridBuilder</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">cross_val_rf</span> <span class="o">=</span> <span class="n">CrossValidator</span><span class="p">(</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">rf_clf</span><span class="p">,</span> <span class="n">estimatorParamMaps</span> <span class="o">=</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">evaluator</span> <span class="o">=</span> <span class="n">f1_evaluation</span><span class="p">,</span> <span class="n">numFolds</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">cv_model_rf</span> <span class="o">=</span> <span class="n">cross_val_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+    <span class="n">res_rf</span> <span class="o">=</span> <span class="n">cv_model_rf</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="c1"># Getting different evaluation metrics for Random Forest</span>
+    <span class="n">evaluator</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span><span class="n">predictionCol</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The metrics for our Random Forest Classifier are as follows :&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The accuracy Score is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">res_rf</span><span class="p">,</span> <span class="p">{</span><span class="n">evaluator</span><span class="o">.</span><span class="n">metricName</span> <span class="p">:</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">})))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The F1 is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">res_rf</span><span class="p">,</span> <span class="p">{</span><span class="n">evaluator</span><span class="o">.</span><span class="n">metricName</span> <span class="p">:</span> <span class="s2">&quot;f1&quot;</span><span class="p">})))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[146]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_data</span> <span class="o">=</span> <span class="n">feat_1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_4</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
+             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_5</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
+             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_2D</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3A</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span>\
+             <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3B</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">feat_3C</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="s1">&#39;inner&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+
+<span class="n">final_data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -20690,20 +20777,71 @@ The accuracy is 0.5802469135802468
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[311]:</div>
+    <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+------+
+|tot_thumbs_up|tot_songs|tot_artist|tot_friends|tot_playlist|tot_thumb_down|tot_errs|tot_help|tot_setting|gender|   tot_listen_time|      tot_lifetime|target|
++-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+------+
+|           17|      275|       275|          4|           7|             5|       0|       2|          0|     0| 66940.89735000003|  55.6436574074074|     0|
+|           21|      387|       387|          4|           8|             6|       0|       2|          0|     1| 94008.87593999993| 70.07462962962963|     0|
+|            0|        8|         8|          0|           0|             0|       0|       0|          0|     1|2089.1131000000005| 71.31688657407408|     1|
+|          171|     4079|      4079|         74|         118|            41|       6|      23|          6|     0|1012312.0927899999|131.55591435185184|     0|
+|          100|     2111|      2111|         28|          52|            21|       1|      12|          1|     1| 523275.8428000004|19.455844907407407|     1|
+|            7|      150|       150|          1|           5|             1|       1|       1|          1|     1| 38034.08710000002| 72.77818287037037|     0|
+|           81|     1914|      1914|         31|          59|            14|       2|       8|          2|     1|477307.60581000015|56.513576388888886|     0|
+|          163|     2841|      2841|         33|          72|            29|       1|      17|          3|     0| 711344.9195400011|110.75168981481481|     1|
+|           58|      820|       820|         11|          24|             3|       3|       9|          0|     0|       198779.2919|23.556018518518517|     0|
+|           17|      257|       257|          6|           7|             3|       0|       2|          0|     1| 67703.47208000004| 85.08340277777778|     1|
+|           96|     1928|      1928|         41|          38|            17|       3|      16|          4|     0| 483118.9038399997|  66.8891087962963|     0|
+|           11|       84|        84|          3|           1|             0|       0|       1|          0|     0|20660.023910000007|23.872037037037035|     0|
+|           86|     1797|      1797|         29|          61|            16|       3|      12|          2|     1| 447464.0146699989|53.965937499999995|     1|
+|           40|      647|       647|          6|          20|             9|       1|       3|          2|     0|159669.96303999983|124.47825231481481|     1|
+|           95|     2070|      2070|         41|          67|            24|       1|      13|          4|     1| 512449.8827599989| 66.62668981481481|     0|
+|          303|     3632|      3632|         63|         113|            28|       5|      27|          3|     0| 897406.9802100015| 74.35851851851852|     0|
+|           11|      230|       230|          7|           7|             5|       2|       0|          0|     1| 57633.17563999999| 64.73886574074074|     1|
+|          154|     3028|      3028|         47|          89|            22|       0|      28|          4|     1| 754517.5625700009|60.104050925925925|     1|
+|           72|     1125|      1125|         12|          33|             9|       4|       7|          1|     0| 286064.0256399999| 71.42444444444445|     0|
+|            9|      215|       215|          7|           7|             3|       0|       1|          3|     1| 53062.74659000002| 87.46262731481481|     0|
++-------------+---------+----------+-----------+------------+--------------+--------+--------+-----------+------+------------------+------------------+------+
+only showing top 20 rows
 
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[0.5760507074079584,
- 0.5716328791543166,
- 0.5687362674619394,
- 0.5716328791543166,
- 0.5597253678493844,
- 0.5716328791543166]</pre>
+</pre>
+</div>
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[153]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">churn_Detection</span><span class="p">(</span><span class="n">final_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The metrics for our Random Forest Classifier are as follows :
+The accuracy Score is 0.6
+The F1 is 0.6000000000000001
+</pre>
+</div>
 </div>
 
 </div>
